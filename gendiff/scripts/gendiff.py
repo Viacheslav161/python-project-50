@@ -16,5 +16,5 @@ def main():
     print(f'Comparing files:\n  First file: {args.first_file}\n  Second file: {args.second_file}')
 
 
-if name == 'main':
+if __name__ == '__main__':
     main()
