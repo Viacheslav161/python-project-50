@@ -1,19 +1,15 @@
 import argparse
 
-
 def main():
-    # Создаем парсер аргументов командной строки
-    parser = argparse.ArgumentParser(description='Compares two configuration files and shows a difference.')
+    parser = argparse.ArgumentParser(description="Compares two configuration files and shows a difference.")
+    parser.add_argument("first_file", help="First file to compare")
+    parser.add_argument("second_file", help="Second file to compare")
+    parser.add_argument("-f", "--format", default="plain", help="Set format of output")
 
-    # Определяем позиционные аргументы
-    parser.add_argument('first_file', help='first configuration file')
-    parser.add_argument('second_file', help='second configuration file')
-
-    # Парсим аргументы
     args = parser.parse_args()
 
-    # Здесь вы можете добавить логику для сравнения файлов
-    print(f'Comparing files:\n  First file: {args.first_file}\n  Second file: {args.second_file}')
+    # Здесь код сравнения файлов. Пока просто вывод аргументов:
+    print(f"Comparing {args.first_file} and {args.second_file} with format {args.format}")
 
 
 if __name__ == '__main__':
