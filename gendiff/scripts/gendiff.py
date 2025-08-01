@@ -1,7 +1,5 @@
 import argparse
 import json
-
-
 def generate_diff(file1_path, file2_path):
     """
     Generates a diff between two JSON files.
@@ -18,14 +16,12 @@ def generate_diff(file1_path, file2_path):
     diff = "{\n"
     for key in all_keys:
         if key in data1 and key in data2:
-            if data1[key] == data2[key]:
-                diff += f"    {key}: {data1[key]}\n"
-            else:
+            if data1[key] != data2[key]:
                 diff += f"  - {key}: {data1[key]}\n"
                 diff += f"  + {key}: {data2[key]}\n"
         elif key in data1:
             diff += f"  - {key}: {data1[key]}\n"
-        else:
+        elif key in data2:
             diff += f"  + {key}: {data2[key]}\n"
     diff += "}"
 
@@ -44,6 +40,7 @@ def main():
     diff = generate_diff(args.first_file, args.second_file)
     print(diff)
 
-
 if __name__ == '__main__':
     main()
+
+

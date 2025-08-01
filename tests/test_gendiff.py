@@ -1,76 +1,54 @@
-import pytest
-from gendiff import generate_diff
 import json
 import os
+import pytest
+from gendiff.scripts.gendiff import generate_diff
 
-# Пример тестовых данных (создайте эти файлы)
-file1_content = """
-{
-  "host": "hexlet.io",
-  "timeout": 50,
-  "proxy": "123.234.53.22",
-  "follow": false
-}
-"""
+# Создаем временные JSON-файлы для тестирования
+@pytest.fixture
+def json_files(tmpdir):
+    file1 = tmpdir.join("file1.json")
+    file2 = tmpdir.join("file2.json")
 
-file2_content = """
-{
-  "timeout": 20,
-  "verbose": true,
-  "host": "hexlet.io"
-}
-"""
-expected_diff = """{\n  - follow: false\n    host: hexlet.io\n  - proxy: 123.234.53.22\n  - timeout: 50\n  + timeout: 20\n  + verbose: true\n}"""
+    # Содержимое первого файла
+    data1 = {"key1": "value1", "key2": "value2"}
+    file1.write(json.dumps(data1))
 
+    # Содержимое второго файла
+    data2 = {"key1": "value1", "key2": "value3"}
+    file2.write(json.dumps(data2))
 
-file3_content = """
-{
-  "host": "hexlet.io",
-  "timeout": 50,
-  "proxy": "123.234.53.22",
-  "follow": true
-}
-"""
+    return str(file1), str(file2)
 
-file4_content = """
-{
-  "timeout": 20,
-  "verbose": true,
-  "host": "hexlet.io",
-  "proxy": "123.234.53.22",
-  "follow": true
-}
-"""
-expected_diff2 = """{\n  - timeout: 50\n  + timeout: 20\n  + verbose: true\n}"""
+def test_generate_diff_same_files(json_files):
+    file1, file2 = json_files
 
+    # Перезаписываем второй файл содержимым первого
+    with open(file2, 'w') as f:
+        f.write(open(file1).read())
 
-# Вспомогательная функция для записи контента в временные файлы
-def create_temp_file(content, suffix=".json"):
-    import tempfile
-    temp_file = tempfile.NamedTemporaryFile(mode='w', delete=False, suffix=suffix, encoding='utf-8')
-    temp_file.write(content)
-    temp_file.close()
-    return temp_file.name
+    expected = "{\n}"
 
-def test_generate_diff():
-    file1_path = create_temp_file(file1_content)
-    file2_path = create_temp_file(file2_content)
+    assert generate_diff(file1, file2) == expected
 
-    diff = generate_diff(file1_path, file2_path)
-    assert diff == expected_diff
+def test_generate_diff_different_files(json_files):
+    file1, file2 = json_files
 
-    # Удаляем временные файлы
-    os.unlink(file1_path)
-    os.unlink(file2_path)
+    expected = """{
+  - key2: value2
+  + key2: value3
+}"""
 
-def test_generate_diff2():
-    file3_path = create_temp_file(file3_content)
-    file4_path = create_temp_file(file4_content)
+    assert generate_diff(file1, file2) == expected
 
-    diff = generate_diff(file3_path, file4_path)
-    assert diff == expected_diff2
+def test_generate_diff_missing_keys(json_files):
+    file1, file2 = json_files
+    # Создадим файл без одного из ключей
+    data3 = {"key1": "value1"}
+    with open(file2, 'w') as f:
+        json.dump(data3, f)
 
-    # Удаляем временные файлы
-    os.unlink(file3_path)
-    os.unlink(file4_path)
+    expected = """{
+  - key2: value2
+}"""
 
+    assert generate_diff(file1, file2) == expected
