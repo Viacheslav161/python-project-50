@@ -9,6 +9,7 @@ dependencies = []
 [tool.uv]
     dev-dependencies = [
         "pytest",
+        "PyYAML >=6.0"
         "pytest-cov",
         "flake8"
     ]
@@ -26,3 +27,5 @@ packages = ["gendiff"]
 [tool.hatch.envs.default.scripts]
 test = "pytest --cov-report term --cov hexlet_code"
 lint = "flake8 gendiff"
+
+

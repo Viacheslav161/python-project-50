@@ -1,6 +1,8 @@
+print("Running gendiff/parser.py")
 import json
 import yaml
 def load_data(file_path):
+    print(f"Loading data from: {file_path}")
     """Loads data from a file based on its extension."""
     with open(file_path, 'r') as f:
         try:
