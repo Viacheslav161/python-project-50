@@ -2,61 +2,93 @@
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=Viacheslav161_python-project-50&metric=coverage)](https://sonarcloud.io/summary/new_code?id=Viacheslav161_python-project-50)
 [![Actions Status](https://github.com/Viacheslav161/python-project-50/actions/workflows/hexlet-check.yml/badge.svg)](https://github.com/Viacheslav161/python-project-50/actions)
 4step-
-https://asciinema.org/a/dBgeenVcELBaL9RPRarlFP4n6
+
 ### Project Description
 
-# Task Manager
+# Difference Calculator (gendiff)
 
-A Django-based task management system that allows users to create, track, and manage tasks with statuses and labels.
+- gendiff is a command-line tool for finding differences between files. This is the second project developed as part of
+  the Hexlet course.
 
-## Features
+***
 
-- User authentication and authorization
-- Task management (create, read, update, delete)
-- Status management for tasks
-- Label management for task categorization
-- Internationalization support (i18n)
-- Responsive design
+## Requirements:
 
-## Tech Stack
+[Python 3.13 +] - (https://www.python.org/downloads/)
 
-- Python 3.11+
-- Django 5.2
-- PostgreSQL
-- Bootstrap 5
+[UV 0.5.11 +] - (https://astral.sh)
+***
 
-## Project Structure
+## Installation:
 
-- `task_manager/` - Main application directory
-  - `users/` - User management
-  - `tasks/` - Task management
-  - `statuses/` - Task status management
-  - `labels/` - Task label management
-  - `templates/` - HTML templates
-  - `locale/` - Translation files
+``` 
+git clone git@github.com:Viacheslav161/python-project-50.git
+```
 
-## Setup and Installation
+````
+cd python-project-50
+````
 
-1. Clone the repository
-   ```bash
-   git clone git@github.com:lyovaparsyan94/python-project-52.git
-   ```
-2. Install dependencies:
-   ```bash
-   make install
-   ```
-3. Start the application:
-   ```bash
-   make run
-   ```
+`````
+uv build
+``````
 
-## Development
+````````
+uv tool install dist/*.whl
+````````
 
-- Run tests:
-  ```bash
-  make test
-  ```
-- Check code style:
-  ```bash
-  make lint
-  ```
+***
+
+## Supported File Formats
+
+#### - JSON (.json)
+
+#### - YAML (.yaml, .yml)
+
+***
+
+## Usage
+
+1. Place the files you want to compare inside the tests/test_data directory.
+2. Run the following command, replacing file1 and file2 with your actual file names:
+
+````
+uv run gendiff tests/test_data/<file1> tests/test_data/<file2>
+````
+
+3. By default, the output is formatted using the stylish formatter.
+
+- To use a different format (json or plain), specify it with the -f flag:
+
+***
+
+### Пример вывода инструмента при использовании разных форматтеров:
+
+- **Default (stylish) formatter:**
+
+````
+uv run gendiff tests/test_data/<file1> tests/test_data/<file1>
+````
+
+- **Using the JSON formatter:**
+
+``````
+uv run gendiff -f stylish tests/test_data/<file1> tests/test_data/<file1>
+``````
+
+- **Using the Plain formatter:**
+
+``````
+uv run gendiff -f plain tests/test_data/<file1> tests/test_data/<file1>
+``````
+
+## Development and Testing
+### Linting
+Run ruff to check for linting issues:
+```
+make lint
+```
+Running Tests
+```
+make test-coverage
+```
